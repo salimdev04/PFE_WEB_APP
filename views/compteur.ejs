@@ -1,0 +1,319 @@
+<%- include("header") -%>
+
+<main class="max-w-[1000px] bg-gray-200 m-auto h-full p-3">
+  <div class="flex justify-between p-3 bg-white">
+    <span> ID : ZMS-<%= compteur._id %>-00452 </span>
+    <span class="<%= compteur.compteur_state === "ACTIVE" ? "text-green-500" : "text-red-500" %>"> <%= compteur.compteur_state  %>  </span>
+    <span> 12/02/2022 </span>
+  </div>
+  <div class="flex items-center flex-col justify-center">
+   <!--  <div class="bg-white p-6 m-2 shadow-md rounded-sm">
+      <span id="actuelEnergy" class="font-bold text-lg">
+        100 kw
+      </span>
+    </div> -->
+    <div class="my-6 w-[800px] h-[500px]">
+      <canvas class="bg-white" height="500px" id="graphic" width="800px">
+      </canvas>
+    </div>
+
+
+
+    <div class="flex flex-col w-[800px] ">
+      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+          <div class="overflow-hidden">
+            <table class="min-w-full">
+
+              <tbody>
+                <tr class="border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-red-700 font-bold px-6 py-4 whitespace-nowrap">
+                    ENERGIE CONSOMMER
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.month_energies[0] %> KWh
+                  </td>
+                </tr>
+                <tr class="border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-red-700 font-bold px-6 py-4 whitespace-nowrap">
+                    PRIX CONSOMMER
+                  </td>
+                  <td class="text-sm text-red-700 font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.recharge %> KWh
+                  </td>
+                </tr>
+                <tr class="border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-red-700 font-bold px-6 py-4 whitespace-nowrap">
+                  TRANCHE 
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.recharge %> KWh
+                  </td>
+                </tr>
+                <tr class="border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    ENERGIE DE RECHARGE
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.recharge %> KWh
+                  </td>
+                </tr>
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    DELAI D'ABONNEMENT
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.abonnement %> MOIS
+                  </td>
+                </tr>
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    MODE
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.mode_consom %>
+                  </td>
+                </tr>
+
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    NOM
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.user.full_name?.toUpperCase() %>
+                  </td>
+                </tr>
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    EMAIL
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.user.email %>
+                  </td>
+                </tr>
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    PROFESSION
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.user.profession?.toUpperCase() %>
+                  </td>
+                </tr>
+                <tr class=" border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    TELEPHONE
+                  </td>
+                  <td class="text-sm text-black font-bold px-6 py-4 whitespace-nowrap">
+                    <%= compteur.user.telephone %>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  
+    <div class="my-6">
+      <button
+        id="secteur"
+        class="bg-red-600 btn-custom m-5"
+        onclick="onSecteur()"
+        type="button"
+      >
+        BLOQUER LE SECTEUR
+      </button>
+      <button
+        class="bg-red-800 btn-custom m-5"
+        onclick="onReset()"
+        type="button"
+      >
+        RESET COMPTEUR
+      </button>
+      <button
+        class="bg-green-600 btn-custom m-5"
+        onclick="onChangeMode()"
+        type="button"
+      >
+        CHANGER MODE RECHARGE
+      </button>
+      <button
+        class="bg-green-800 btn-custom m-5"
+        onclick="onRecharge()"
+        type="button"
+      >
+        RECHARGER COMPTEUR
+      </button>
+      <button
+        class="btn-custom m-5 bg-green-800"
+        onclick="onDebug()"
+        type="button"
+      >
+        MODE DEBUG
+      </button>
+
+      <button type="button" class="btn-custom m-5 bg-blue-700" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+        RECHARGER COMPTEUR
+      </button>
+      <button type="button" class="btn-custom m-5 bg-blue-600" data-bs-toggle="modal"
+        data-bs-target="#exampleModalCenteredScrollable">
+        USER PROFILE
+      </button>
+      
+        
+        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+          id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-modal="true" role="dialog">
+          <div class="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
+            <div
+              class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+              
+              <div class="modal-body relative p-4">
+                <div class="flex justify-center">
+                  <div class="mb-3 xl:w-96">
+                    <label for="rechargeValue" class="form-label inline-block mb-2 text-gray-700">Entrez le nombre de kwh</label>
+                    <input type="number" class="
+                        form-control
+                        block
+                        w-full
+                        px-3
+                        py-1.5
+                        text-base
+                        font-normal
+                        text-gray-700
+                        bg-white bg-clip-padding
+                        border border-solid border-gray-300
+                        rounded
+                        transition
+                        ease-in-out
+                        m-0
+                        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                      " id="rechargeValue" name="recharge" placeholder="Nombre de kwh" />
+                  </div>
+                </div>
+              </div>
+
+
+              <div
+                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                <button type="button"
+                  class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                  data-bs-dismiss="modal">
+                  FERMER
+                </button>
+                <button type="button" onclick="onRecharge()"
+                  class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
+                  RECHARGER
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+          id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollable" aria-modal="true"
+          role="dialog">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+            <div
+              class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+              <div class="modal-body relative p-4">
+               
+
+                  
+                    <form class="container">
+     
+                      <div class="space-y-6 bg-white">
+                        <div class="tabs_div">
+                          <h2 class="max-w-sm mx-auto md:w-1/3">
+                            NOM COMPLET
+                          </h2>
+                          <div class="max-w-sm mx-auto md:w-2/3">
+                            <div class=" relative ">
+                              <input type="text" id="user-info-email"
+                                class=" rounded-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:"
+                                placeholder="NOM COMPLET" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="tabs_div">
+                          <h2 class="max-w-sm mx-auto md:w-1/3">
+                            PROFESSION
+                          </h2>
+                          <div class="max-w-sm mx-auto md:w-2/3">
+                            <div class=" relative ">
+                              <input type="text" id="user-info-email"
+                                class=" rounded-lg  flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:"
+                                placeholder="Profession" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="tabs_div">
+                          <h2 class="max-w-sm mx-auto md:w-1/3">
+                            EMAIL
+                          </h2>
+                          <div class="max-w-sm mx-auto md:w-2/3">
+                            <div class=" relative ">
+                              <input type="text" id="user-info-email"
+                                class=" rounded-lg  flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:"
+                                placeholder="Email" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="tabs_div">
+                          <h2 class="max-w-sm mx-auto md:w-1/3">
+                            TELEPHONE
+                          </h2>
+                          <div class="max-w-sm mx-auto md:w-2/3">
+                            <div class=" relative ">
+                              <input type="text" id="user-info-email"
+                                class=" rounded-lg  flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:"
+                                placeholder="Telephone" />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                    
+                      </div>
+                    </form>
+
+
+
+
+              </div>
+              <div
+                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                <button type="button"
+                  class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                  data-bs-dismiss="modal">
+                  FERMER
+                </button>
+                <button type="button"
+                  class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1">
+                  ENREGISTRER
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+    </div>
+
+
+    
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="/socket.io/socket.io.js" defer></script>
+<script src="../js/main.js" defer></script>
+
+<%- include("footer") -%>

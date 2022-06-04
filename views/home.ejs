@@ -1,0 +1,86 @@
+<%- include("header") -%>
+
+<main class="max-w-[1000px] bg-gray-200 m-auto p-6 h-full">
+    <ul class="ul_home_tab nav nav-tabs md: flex-row"
+        id="tabs-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a aria-controls="tabs-home" aria-selected="true"
+                class=" nav-link a_link_tab hover: border-transparent hover:bg-gray-100 active "
+                data-bs-target="#tabs-home" data-bs-toggle="pill" href="#tabs-home" id="tabs-home-tab" role="tab">
+                Tous les compteurs
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a aria-controls="tabs-profile" aria-selected="false"
+                class=" nav-link a_link_tab hover: border-transparent hover:bg-gray-100 "
+                data-bs-target="#tabs-profile" data-bs-toggle="pill" href="#tabs-profile" id="tabs-profile-tab"
+                role="tab">
+                Compteurs active
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a aria-controls="tabs-messages" aria-selected="false"
+                class=" nav-link a_link_tab hover: border-transparent hover:bg-gray-100 "
+                data-bs-target="#tabs-messages" data-bs-toggle="pill" href="#tabs-messages" id="tabs-messages-tab"
+                role="tab">
+                Compteur inactive
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="tabs-tabContent">
+        <div aria-labelledby="tabs-home-tab" class="tab-pane fade show active" id="tabs-home" role="tabpanel">
+            <% for(let i = 0; i < data.length; i++){ %> 
+                <a href="/<%=data[i]._id %>/compteur">
+                    <div class="div_tab">
+                        <span>ID : ZMS-<%=data[i]._id %>-00452</span>
+                        <span  class="<%= data[i].compteur_state === "ACTIVE" ? "text-green-500" : "text-red-500" %>"> <%= data[i].compteur_state %></span>
+                        <span>12/02/2022</span>
+                    </div>
+                </a>
+            <% } %>
+
+        </div>
+        <div aria-labelledby="tabs-profile-tab" class="tab-pane fade" id="tabs-profile" role="tabpanel">
+            <% for(let i=0; i < act_cmpts.length; i++){ %>
+                <a href="/<%=act_cmpts[i]._id %>/compteur">
+                    <div class="div_tab">
+                        <span>ID : ZMS-<%=act_cmpts[i]._id %>-00452</span>
+                        <span class="text-green-500"">
+                            <%= act_cmpts[i].compteur_state %>
+                        </span>
+                        <span>12/02/2022</span>
+                    </div>
+                </a>
+                <% } %>
+        </div>
+        <div aria-labelledby="tabs-profile-tab" class="tab-pane fade" id="tabs-messages" role="tabpanel">
+            <% for(let i=0; i < inact_cmpts.length; i++){ %>
+                <a href="/<%=inact_cmpts[i]._id %>/compteur">
+                    <div class="div_tab">
+                        <span>ID : ZMS-<%=inact_cmpts[i]._id %>-00452</span>
+                        <span class="text-red-500">
+                            <%= inact_cmpts[i].compteur_state %>
+                        </span>
+                        <span>12/02/2022</span>
+                    </div>
+                </a>
+                <% } %>
+        </div>
+        <div aria-labelledby="tabs-contact-tab" class="tab-pane fade" id="tabs-contact" role="tabpanel">
+            Tab 4 content
+        </div>
+    </div>
+</main>
+
+
+
+
+
+
+
+
+<%- include("footer") -%>
+
+
+
+
